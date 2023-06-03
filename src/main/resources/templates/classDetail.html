@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:include="header :: head"></div>
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <th:block th:include="title.html"></th:block>
+        <!-- Navbar-->
+        <th:block th:include="logout.html"></th:block>
+    </nav>
+    <div id="layoutSidenav">
+        <div th:include="nav :: header"></div>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">
+                        Thông tin lớp <span th:text="${class.name}"></span>
+                    </h1>
+                    <table id="table" class="table table-responsive-xl">
+                        <tr class="thead-dark">
+                            <th>Mã lớp</th>
+                            <th>Giáo viên phụ trách</th>
+                            <th>Số điện thoại GV</th>
+                            <th>Sỉ số lớp</th>
+                            <th>Khóa học</th>
+                            <th>Học phí</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td th:text="${class.classId}"></td>
+                            <td th:text="${class.employee.fullname}"></td>
+                            <td th:text="${class.employee.phoneNumber}"></td>
+                            <td th:text="${class.numberOfstudents.toString() + '/' + class.maximumSize.toString()}">
+                            </td>
+                            <td th:text="${class.course.name}"></td>
+                            <td th:text="${class.tuitionFee}"></td>
+                            <td>
+                                <a href="" data-bs-toggle="modal" data-bs-target="#updateClass">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path
+                                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd"
+                                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                    <h1 class="mt-4">
+                        Danh sách học viên hiện tại:
+                    </h1>  
+                    <table class="table table-hover table-responsive-xl" id="tableStudent">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Mã học viên</th>
+                                <th>Họ và tên</th>
+                                <th>Địa chỉ</th>
+                                <th>Số điện thoại</th>
+                                <th>CMND/CCCD</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:id="${student.id}" th:each="student : ${class.students}">
+                                <td th:text="${student.id}" style="padding: 17px !important"></td>
+                                <td th:text="${student.fullname}" style="padding: 17px !important"></td>
+                                <td th:text="${student.address}" style="padding: 17px !important"></td>
+                                <td th:text="${student.phoneNumber}" style="padding: 17px !important"></td>
+                                <td th:text="${student.citizenId}" style="padding: 17px !important"></td>
+                                <td style="padding: 17px !important">
+                                    <a href="" th:onclick="|openConfirmationModal('${student.id}')|"
+                                        data-bs-toggle="modal" data-bs-target="#confirmDelete">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path
+                                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+                                            <path
+                                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="text-align: right;">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addStudent"> <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
+                                <path
+                                    d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                                <path fill-rule="evenodd"
+                                    d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+                            </svg>
+                            <span class="">Thêm học viên mới</span>
+                        </button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addStudentExisted"> <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                height="32" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
+                                <path
+                                    d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                                <path fill-rule="evenodd"
+                                    d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+                            </svg>
+                            <span class="">Thêm học viên đã tồn tại</span>
+                        </button>
+
+
+                    </div>
+                    <!-- The modal add student -->
+                    <div class="modal fade" id="addStudent" tabindex="-1" aria-labelledby="addStudent"
+                        aria-hidden="true" th:with="classId=${param['classId']}">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Thêm học viên mới</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="row g-3" action="/student/add" method="POST" accept-charset="UTF-8">
+                                        <div class="col-md-12">
+                                            <label for="lastName" class="form-label">Họ</label>
+                                            <input type="text" class="form-control" id="lastName" name="lastName">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="middleName" class="form-label">Tên đệm</label>
+                                            <input type="text" class="form-control" id="middleName" name="middleName">
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="firstName" class="form-label">Tên</label>
+                                            <input type="text" class="form-control" id="firstName" name="firstName">
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="address" class="form-label">Địa chỉ</label>
+                                            <input type="text" class="form-control" id="address"
+                                                placeholder="123 Võ Văn Ngân, phường Bình Thọ, Thủ Đức, HCM"
+                                                name="address">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="phone" class="form-label">Số điện thoại</label>
+                                            <input type="text" class="form-control" id="phone" name="phone">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="citizenNumber" class="form-label">CMND/CCCD</label>
+                                            <input type="text" class="form-control" id="citizenNumber"
+                                                name="citizenNumber">
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary">Thêm</button>
+                                        </div>
+                                        <input type="hidden" id="classId" name="classId" th:value="${class.classId}" />
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- The modal add student existed -->
+                    <div class="modal fade" id="addStudentExisted" tabindex="-1" aria-labelledby="addStudentExisted"
+                        aria-hidden="true" th:with="classId=${param['classId']}">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Thêm học viên đã tồn tại</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-hover" id="studentTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Họ và tên</th>
+                                                <th>Địa chỉ</th>
+                                                <th>Số điện thoại</th>
+                                                <th>CMND/CCCD</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="student : ${students}">
+                                                <td th:text="${student.fullname}"></td>
+                                                <td th:text="${student.address}"></td>
+                                                <td th:text="${student.phoneNumber}"></td>
+                                                <td th:text="${student.citizenId}"></td>
+                                                <td>
+                                                    <!-- th:onclick="|redirectClassDetail('${class.classId}')| -->
+                                                    <a href="" th:onclick="|openConfirmationModal('${student.id}')|"
+                                                        data-bs-toggle="modal" data-bs-target="#confirmAdd">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                            fill="currentColor" class="bi bi-person-add"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+                                                            <path
+                                                                d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z" />
+                                                        </svg>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- Confirmation add student existed Modal -->
+                <div class="modal fade" id="confirmAdd" tabindex="-1" role="dialog" aria-labelledby="confirmAddLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmAddLabel">Confirmation</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Bạn có chắc là muốn thêm học viên này vào lớp?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Không</button>
+                                <button type="button" class="btn btn-primary"
+                                    th:onclick="|handleConfirmation('${class.classId}')|" data-bs-dismiss="modal"
+                                    aria-label="Close">Đồng ý</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Confirmation delete student existed Modal -->
+                <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="confirmDelete"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmAddLabel">Confirmation</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Bạn có chắc là muốn xóa học viên này?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Không</button>
+                                <button type="button" class="btn btn-primary"
+                                    th:onclick="|handleDeleteConfirmation('${class.classId}')|" data-bs-dismiss="modal"
+                                    aria-label="Close">Đồng ý</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- The modal update class -->
+                <div class="modal fade" id="updateClass" tabindex="-1" aria-labelledby="updateClass" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Thông tin lớp học</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/class/update" method="POST" accept-charset="UTF-8">
+                                    <div class="mb-3">
+                                        <input type="text" th:value="${class.classId}" class="form-control" id="classId"
+                                            name="classId" hidden>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="nameClass" class="form-label">Tên lớp học</label>
+                                        <input type="text" th:value="${class.name}" class="form-control" id="nameClass"
+                                            name="nameClass" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="startDate" class="form-label">Giáo viên phụ trách</label>
+                                        <select name="employeeId" class="form-select">
+                                            <option value="">Chọn giáo viên</option>
+                                            <option th:each="employee : ${employees}" th:value="${employee.employeeId}"
+                                                th:text="${employee.fullname}"
+                                                th:selected="${employee.employeeId == class.employee.employeeId}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tuitionFee" class="form-label">Học phí</label>
+                                        <input type="number" class="form-control" id="tuitionFee" name="tuitionFee"
+                                            required th:value="${class.tuitionFee}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="maximumSize" class="form-label">Số lượng học viên tối đa</label>
+                                        <input type="number" class="form-control" id="maximumSize" name="maximumSize"
+                                            required th:value="${class.maximumSize}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="courseId" class="form-label">Khóa học</label>
+                                        <select name="courseId" class="form-select">
+                                            <option value="">Chọn khóa học</option>
+                                            <option th:each="course : ${courses}" th:value="${course.courseId}"
+                                                th:text="${course.name}"
+                                                th:selected="${course.courseId == class.course.courseId}"> </option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy
+                                            bỏ</button>
+                                        <button type="submit" class="btn btn-primary">Cập nhật thông tin lớp</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <div th:include="footer :: footer"></div>
+        </div>
+    </div>
+    <div th:include="script :: div"></div>
+    <script>
+        let selectedClassId;
+
+        function openConfirmationModal(studentId) {
+            selectedstudentId = studentId;
+        }
+
+        function handleDeleteConfirmation(classId) {
+            // Make the API call using the selectedClassId
+            var rowStudentTable = document.getElementById('selectedstudentId');
+            $.ajax({
+                url: '/class/deleteStudent',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    classId: classId,
+                    studentId: selectedstudentId
+                },
+                success: function (student) {
+                    // DElete the student in the table
+                    rowStudentTable.remove();
+                    alert("Thêm học viên thành công")
+                    console.log(rowStudentTable.innerHTML);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ' ' + errorThrown);
+                }
+            });
+
+            // Reset the selectedClassId for future use
+            selectedClassId = null;
+        }
+
+        function handleConfirmation(classId) {
+            // Make the API call using the selectedClassId
+            var tableStudent = document.getElementById('tableStudent');
+            $.ajax({
+                url: '/class/addStudentForClass',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    classId: classId,
+                    studentId: selectedstudentId
+                },
+                success: function (student) {
+                    // Append the student to the table
+                    var newRow = '<tr>' +
+                        '<td>' + student.id + '</td>' +
+                        '<td>' + student.fullname + '</td>' +
+                        '<td>' + student.address + '</td>' +
+                        '<td>' + student.phoneNumber + '</td>' +
+                        '<td>' + student.citizenId + '</td>' +
+                        `<td>
+                                    <a href="" th:onclick="|openConfirmationModal('${student.id}')|" data-bs-toggle="modal"
+                                    data-bs-target="#confirmDelete">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path
+                                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+                                            <path
+                                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+                                        </svg>
+                                    </a>
+                                </td>`+
+                        '</tr>';
+                    $('#tableStudent tbody').append(newRow);
+                    alert("Thêm học viên thành công")
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ' ' + errorThrown);
+                }
+            });
+
+            // Reset the selectedClassId for future use
+            selectedClassId = null;
+        }
+    </script>
+    <script>
+        function getStudents(classId) {
+            $.ajax({
+                url: '/api/findAllStudentExceptClassId',
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({
+                    classId: classId,
+                    name: ""
+                }),
+                contentType: 'application/json',
+                success: function (data) {
+                    var tbody = $('#studentTable tbody');
+                    tbody.empty();
+                    $.each(data, function (index, student) {
+                        var tr = $('<tr>');
+                        tr.append('<td>' + student.fullname + '</td>');
+                        tr.append('<td>' + student.address + '</td>');
+                        tr.append('<td>' + student.phoneNumber + '</td>');
+                        tr.append('<td>' + student.citizenId + '</td>');
+                        tbody.append(tr);
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ' ' + errorThrown);
+                }
+            });
+        }
+
+        function updateClass(classId, studentId) {
+            $.ajax({
+                url: '/class/addStudentForClass',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    classId: classId,
+                    studentId: studentId
+                },
+                success: function (data) {
+                    alert("Thêm học viên thành công")
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ' ' + errorThrown);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
