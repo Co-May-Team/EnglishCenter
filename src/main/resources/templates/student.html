@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:include="header :: head"></div>
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <th:block th:include="title.html"></th:block>
+        <div style="margin-left: auto; display: flex;">
+            <!-- Navbar Search-->
+            <th:block th:include="search.html"></th:block>
+            <!-- Navbar-->
+
+            <th:block th:include="logout.html"></th:block>
+        </div>
+    </nav>
+    <div id="layoutSidenav">
+        <div th:include="nav :: header"></div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Danh sách học viên</h1>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudent">
+                        <span class="fas fa-plus"></span>
+                        Thêm học sinh
+                    </button>
+                    <br>
+                    <div class="card mb-4" style="margin-top: 10px">
+                        <div class="card-body">
+                            <table id="studentTable" class="table table-responsive-xl">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Họ và tên</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Số điện thoại</th>
+                                        <th>CMND/CCCD</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="student : ${students}" th:id="'student-' + ${student.id}">
+                                        <td th:text="${student.fullname}"></td>
+                                        <td th:text="${student.address}"></td>
+                                        <td th:text="${student.phoneNumber}"></td>
+                                        <td th:text="${student.citizenId}"></td>
+                                        <td>
+                                            <a href="" data-bs-toggle="modal" data-bs-target="#updateStudent"
+                                                th:onclick="|setStudentId('${student.id}')|">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                    <path fill-rule="evenodd"
+                                                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                                </svg>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- The modal add student -->
+                    <div class="modal fade" id="addStudent" tabindex="-1" aria-labelledby="addStudent"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/student/add" method="POST" accept-charset="UTF-8">
+
+
+                                        <div class="mb-3">
+                                            <label for="lastName" class="form-label">Họ</label>
+                                            <input type="text" class="form-control" id="lastName" name="lastName"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="middleName" class="form-label">Tên đệm</label>
+                                            <input type="text" class="form-control" id="middleName" name="middleName">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="firstName" class="form-label">Tên</label>
+                                            <input type="text" class="form-control" id="firstName" name="firstName"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label">Địa chỉ</label>
+                                            <input type="text" class="form-control" id="address" name="address"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="phone" class="form-label">Số điện thoại</label>
+                                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="citizenNumber" class="form-label">CMND/CCCD</label>
+                                            <input type="text" class="form-control" id="citizenNumber"
+                                                name="citizenNumber" required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Hủy</button>
+                                            <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- The modal update student -->
+                    <div class="modal fade" id="updateStudent" tabindex="-1" aria-labelledby="updateStudent"
+                        aria-hidden="true" th:with="studentId=${param['studentId']}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Cập nhật thông tin học viên</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/student/update" method="POST" accept-charset="UTF-8"
+                                        id="formStudent">
+                                        <input type="text" class="form-control" id="studentIdUpdate" name="studentId"
+                                            value="" required hidden>
+                                        <div class="mb-3">
+                                            <label class="form-label">Họ:</label>
+                                            <input type="text" class="form-control" id="lastNameUpdate" name="lastName"
+                                                value="" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Tên đệm</label>
+                                            <input type="text" class="form-control" id="middleNameUpdate"
+                                                name="middleName">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Tên</label>
+                                            <input type="text" class="form-control" id="firstNameUpdate"
+                                                name="firstName" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Địa chỉ</label>
+                                            <input type="text" class="form-control" id="addressUpdate" required
+                                                name="address">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Số điện thoại</label>
+                                            <input type="tel" class="form-control" id="phoneNumberUpdate" name="phone"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">CMND/CCCD</label>
+                                            <input type="text" class="form-control" id="citizenIdUpdate"
+                                                name="citizenNumber" required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Hủy</button>
+                                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <div th:include="footer :: footer"></div>
+        </div>
+    </div>
+
+    <div th:include="script :: div"></div>
+    <script>
+        function setStudentId(studentId) {
+            document.getElementById('studentIdUpdate').value = studentId;
+            $.ajax({
+                url: '/api/findStudentById/' + studentId,
+                type: 'GET',
+                success: function (data) {
+                    var firstName = data.firstname;
+                    var lastName = data.lastname;
+                    var middleName = data.middlename;
+                    var phoneNumber = data.phoneNumber;
+                    var address = data.address;
+                    var citizenId = data.citizenId;
+
+                    // Populate the data into the respective input fields
+                    document.getElementById('firstNameUpdate').value = firstName;
+                    document.getElementById('lastNameUpdate').value = lastName;
+                    document.getElementById('middleNameUpdate').value = middleName;
+                    document.getElementById('phoneNumberUpdate').value = phoneNumber;
+                    document.getElementById('addressUpdate').value = address;
+                    document.getElementById('citizenIdUpdate').value = citizenId;
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ' ' + errorThrown);
+                }
+
+            })
+        }
+        $(document).ready(function () {
+            // Get the search input element
+            var searchInputE = document.getElementById('searchInput');
+
+            // Add an input event listener
+            searchInputE.addEventListener('input', function () {
+                // searchInput.on('input', function () {
+                // Get the current search query
+                var query = searchInputE.value;
+                console.log(query);
+                $.ajax({
+                    url: '/api/findAllStudent',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        classId: 0,
+                        name: query
+                    }),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        var tbody = $('#studentTable tbody');
+                        tbody.empty();
+                        $.each(data, function (index, student) {
+                            var tr = $('<tr>');
+                            tr.append('<td>' + student.fullname + '</td>');
+                            tr.append('<td>' + student.address + '</td>');
+                            tr.append('<td>' + student.phoneNumber + '</td>');
+                            tr.append('<td>' + student.citizenId + '</td>');
+                            tbody.append(tr);
+                        });
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('Error: ' + textStatus + ' ' + errorThrown);
+                    }
+                });
+            });
+        })
+
+    </script>
+
+</body>
+
+</html>
