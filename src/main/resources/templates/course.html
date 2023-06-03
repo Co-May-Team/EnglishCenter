@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:include="header :: head"></div>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <th:block th:include="title.html"></th:block>
+
+        <th:block th:include="logout.html"></th:block>
+    </nav>
+    <div id="layoutSidenav">
+
+        <div th:include="nav :: header"></div>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Danh sách khóa học</h1>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourse">
+                        <span class="fas fa-plus"></span>
+                    </button>
+                    <div class="card-body">
+                        <table id="table" class="table table-responsive-xl">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Mã khóa học</th>
+                                    <th>Tên</th>
+                                    <th>Thời gian bắt đầu</th>
+                                    <th>Thời gian kết thúc</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="course : ${courses}">
+                                    <td th:text="${course.courseId}"></td>
+                                    <td th:text="${course.name}"></td>
+                                    <td th:text="${course.scheduleModel.startDate}"></td>
+                                    <td th:text="${course.scheduleModel.endDate}"></td>
+                                    <td>
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#updateCourse"
+                                            th:onclick="|setCourseId('${course.courseId}')|">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- The modal add course -->
+                    <div class="modal fade" id="addCourse" tabindex="-1" aria-labelledby="addCourse" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Thông tin khóa học</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/course/insert" method="POST" accept-charset="UTF-8">
+                                        <div class="mb-3">
+                                            <label for="firstName" class="form-label">Tên khóa học</label>
+                                            <input type="text" class="form-control" id="nameCourse" name="nameCourse"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="startDate" class="form-label">Thời gian bắt đầu</label>
+                                            <input type="date" class="form-control" id="startDate" name="startDate"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="endDate" class="form-label">Thời gian kết thúc</label>
+                                            <input type="date" class="form-control" id="endDate" name="endDate"
+                                                required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy
+                                                bỏ</button>
+                                            <button type="submit" class="btn btn-primary">Thêm khóa học</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- The modal update student -->
+                    <div class="modal fade" id="updateCourse" tabindex="-1" aria-labelledby="updateCourse"
+                        aria-hidden="true" th:with="courseId=${param['courseId']}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Cập nhật thông tin khóa học</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/course/update" method="POST" accept-charset="UTF-8"
+                                        id="formStudent">
+                                        <div class="mb-3">
+                                            <label class="form-label">Mã khóa học</label>
+                                            <input type="text" class="form-control" id="courseIdUpdate" name="courseIdUpdate"
+                                                value="" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Tên khóa học</label>
+                                            <input type="text" class="form-control" id="nameUpdate"
+                                                name="nameUpdate">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Thời gian bắt đầu</label>
+                                            <input type="date" class="form-control" id="startDateUpdate"
+                                                name="startDateUpdate" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Thời gian kết thúc</label>
+                                            <input type="date" class="form-control" id="endDateUpdate"
+                                                name="endDateUpdate" required>
+                                        </div>
+
+                                
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Hủy</button>
+                                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <div th:include="footer :: footer"></div>
+        </div>
+    </div>
+
+    <div th:include="script :: div"></div>
+    <script>
+        function setCourseId(courseId) {
+            document.getElementById('courseIdUpdate').value = courseId;
+            $.ajax({
+                url: '/api/findCourseById/' + courseId,
+                type: 'GET',
+                success: function (data) {
+                    var idUpdate = data.courseId;
+                    var nameUpdate = data.name;
+
+                    var startDateUpdate = data.scheduleModel.startDate;
+                    var endDateUpdate = data.scheduleModel.endDate;
+
+                    // Populate the data into the respective input fields
+                    document.getElementById('nameUpdate').value = nameUpdate;
+                    document.getElementById('startDateUpdate').value = startDateUpdate;
+                    document.getElementById('endDateUpdate').value = endDateUpdate;
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ' ' + errorThrown);
+                }
+
+            })
+        }
+    </script>
+</body>
+
+</html>
