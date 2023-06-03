@@ -5412,7 +5412,7 @@ textarea.form-control-lg {
   }
 }
 @media (min-width: 992px) {
-  .modal-lg,
+  .modal-xl,
   .modal-xl {
     --bs-modal-width: 800px;
   }
