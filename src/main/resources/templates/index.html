@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:include="header :: head"></div>
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        
+        <th:block th:include="title.html"></th:block>
+
+        <!-- Navbar-->
+        <th:block th:include="logout.html"></th:block>
+    </nav>
+
+    <div id="layoutSidenav">
+        <div th:include="nav :: header"></div>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <th:block th:each="course : ${courses}">
+                        <div class="card mb-4">
+                            <div class="row justify-content-center text-center">
+                                <h2 class="heading-section" th:text="${course.name}" style="font-family:'Courier New'"></h2>
+                            </div>
+                            <div class="card-body">
+                                <table id="table" class="table table-responsive-xl">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Tên lớp</th>
+                                            <th>Giáo viên chủ nhiệm</th>
+                                            <th>Niên Khóa</th>
+                                            <th>Sỉ số lớp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="class : ${course.classModels}">
+                                            <td><a th:href="@{/student(class.classId)}"
+                                                    th:onclick="'getStudents(' + ${class.classId} + ')'"
+                                                    data-bs-toggle="modal" data-bs-target="#findAllStudent"
+                                                    th:text="${class.name}"
+                                                    style="text-decoration: underline; color: blue;"></a>
+                                            </td>
+                                            <td th:text="${class.employee.fullname}"></td>
+                                            <td th:text="${course.name}"></td>
+                                            <td
+                                                th:text="${class.numberOfstudents.toString() + '/' + class.maximumSize.toString()}">
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </th:block>
+
+
+                    <!-- The modal add student -->
+                    <div class="modal fade" id="addStudent" tabindex="-1" aria-labelledby="addStudent"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/student/add" method="POST" accept-charset="UTF-8">
+                                        <div class="mb-3">
+                                            <label for="firstName" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="firstName" name="firstName"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="middleName" class="form-label">Middle Name</label>
+                                            <input type="text" class="form-control" id="middleName" name="middleName">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="lastName" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="lastName" name="lastName"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label">Address</label>
+                                            <input type="text" class="form-control" id="address" name="address"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="phone" class="form-label">Phone Number</label>
+                                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="citizenNumber" class="form-label">Citizen Number</label>
+                                            <input type="text" class="form-control" id="citizenNumber"
+                                                name="citizenNumber" required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- The modal show student list -->
+                    <div class="modal fade" id="findAllStudent" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content ">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <i class="fas fa-table me-1"></i>
+                                            Danh sách học sinh
+                                        </div>
+                                        <div class="card-body">
+                                            <table id="studentTable" class="table table-responsive-xl">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th>Họ và tên</th>
+                                                        <th>Địa chỉ</th>
+                                                        <th>Số điện thoại</th>
+                                                        <th>CMND/CCCD</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+                                    <!-- Button to trigger the modal
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#addStudent">
+                                            Thêm học sinh
+                                        </button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <div th:include="footer :: footer"></div>
+        </div>
+    </div>
+
+    <div th:include="script :: div"></div>
+    <script>
+        function getStudents(classId) {
+            $.ajax({
+                url: '/api/findAllStudent',
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({
+                    classId: classId,
+                    name: ""
+                }),
+                contentType: 'application/json',
+                success: function (data) {
+                    var tbody = $('#studentTable tbody');
+                    tbody.empty();
+                    $.each(data, function (index, student) {
+                        var tr = $('<tr>');
+                        tr.append('<td>' + student.fullname + '</td>');
+                        tr.append('<td>' + student.address + '</td>');
+                        tr.append('<td>' + student.phoneNumber + '</td>');
+                        tr.append('<td>' + student.citizenId + '</td>');
+                        tbody.append(tr);
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ' ' + errorThrown);
+                }
+            });
+        }
+        $(document).ready(function () {
+
+        })
+    </script>
+</body>
+
+</html>
