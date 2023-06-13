@@ -23,8 +23,8 @@ public class ClassService {
 	public boolean insert(Class classObj) {
 		return classRepository.insert(classObj);
 	}
-	public boolean update(Class classObj) {
-		return classRepository.update(classObj);
+	public boolean update(Class classObj, int studentId) {
+		return classRepository.update(classObj, studentId);
 	}
 	
 	public ClassModel findModelById(Integer id) {

@@ -24,6 +24,7 @@ import com.softwaredesign.englishcenter.model.StudentModel;
 import com.softwaredesign.englishcenter.service.ClassService;
 import com.softwaredesign.englishcenter.service.CourseService;
 import com.softwaredesign.englishcenter.service.EmployeeService;
+import com.softwaredesign.englishcenter.service.PaymentService;
 import com.softwaredesign.englishcenter.service.StudentService;
 import com.softwaredesign.englishcenter.ultils.ComonUltil;
 
@@ -42,6 +43,9 @@ public class ClassController {
 	
 	@Autowired
 	StudentService studentService;
+	
+	@Autowired
+	PaymentService paymentService;
 	
 	@GetMapping
 	public String findAll(Model model) {
@@ -104,9 +108,11 @@ public class ClassController {
 		students.add(student);
 		classObj.setStudents(students);
 		classObj.setNumberOfstudents(classObj.getNumberOfstudents() + 1);
-		classService.update(classObj);
-		return ComonUltil.toStudentModel(student);
-
+		if(classService.update(classObj,studentId)) {
+			return ComonUltil.toStudentModel(student);
+		}else {
+			return null;
+		}
 	}
 	
 	@PostMapping("/update")
@@ -127,7 +133,7 @@ public class ClassController {
 			classObj.setTuitionFee(new BigDecimal(tuitionFee));
 			classObj.setMaxiumSize(Integer.valueOf(maximumSize));
 			classObj.setValidflag(true);
-			classService.update(classObj);
+			classService.update(classObj, -1);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -140,7 +146,7 @@ public class ClassController {
 			studentService.removeStudentInClass(studentId, classId);
 			Class classObj = classService.findById(classId);
 			classObj.setNumberOfstudents(classObj.getNumberOfstudents() - 1);
-			classService.update(classObj);
+			classService.update(classObj, -1);
 			String view = "redirect:/class/"+ classId;
 		return view;
 

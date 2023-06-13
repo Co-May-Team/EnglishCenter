@@ -70,7 +70,7 @@ public class StudentRepositoryImpl implements IStudentRepository {
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			session.persist(student);
-			return 1;
+			return student.getStudentId();
 		} catch (Exception e) {
 			LOGGER.error("Error has occured at add() ", e);
 		}

@@ -48,10 +48,10 @@ public class StudentController {
     		Class classObj = classService.findById(classId);
     		classes.add(classObj);
     		student.setClasses(classes);
-    		studentService.save(student);
+    		int studentId = studentService.save(student);
     		//update the number of students for class
     		classObj.setNumberOfstudents(classObj.getNumberOfstudents() + 1);
-    		classService.update(classObj);
+    		classService.update(classObj, studentId);
     		return "redirect:/class/"+classId;
     	}
     	studentService.save(student);

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:include="header :: head"></div>
+
+<body class="sb-nav-fixed">
+	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+		<th:block th:include="title.html"></th:block>
+		<div style="margin-left: auto; display: flex;">
+
+			<th:block th:include="logout.html"></th:block>
+		</div>
+	</nav>
+	<div id="layoutSidenav">
+		<div th:include="nav :: header"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">Danh sách biên lai</h1>
+					<div class="card mb-4" style="margin-top: 10px">
+						<div class="card-body">
+							<table id="paymentTable" class="table table-responsive-xl">
+								<thead class="thead-dark">
+									<tr>
+										<th>Mã biên lai</th>
+										<th>Họ và tên</th>
+										<th>Địa chỉ</th>
+										<th>Số điện thoại</th>
+										<th>CMND/CCCD</th>
+										<th>Lớp</th>
+										<th>Học phí</th>
+										<th>Trạng thái</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="payment : ${payments}" th:id="'payment-' + ${payment.paymentId}">
+										<td th:text="${payment.paymentId}"></td>
+										<td th:text="${payment.studentModel.fullname}"></td>
+										<td th:text="${payment.studentModel.address}"></td>
+										<td th:text="${payment.studentModel.phoneNumber}"></td>
+										<td th:text="${payment.studentModel.citizenId}"></td>
+										<td th:text="${payment.classModel.name}"></td>
+										<td th:text="${payment.classModel.tuitionFee}"></td>
+										<td th:text="${payment.status}"></td>
+										<td>
+											<button th:onclick="|openConfirmationModal('${payment.paymentId}')|"  data-bs-toggle="modal" data-bs-target="#confirmAdd">Hoàn
+												tất</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- Confirmation complete payment existed Modal -->
+					<div class="modal fade" id="confirmAdd" tabindex="-1" role="dialog"
+						aria-labelledby="confirmAddLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="confirmAddLabel">Xác nhận hoàn tất biên lai</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p>Hoàn tất biên lai cho học viên</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+										aria-label="Close">Không</button>
+									<button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+										aria-label="Close"
+										th:onclick="|handleConfirmation()|">Đồng ý</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			<div th:include="footer :: footer"></div>
+		</div>
+	</div>
+
+	<div th:include="script :: div"></div>
+	<script>
+		let selectedPaymentId;
+
+		function openConfirmationModal(paymentId) {
+			selectedPaymentId = paymentId;
+		}
+		function handleConfirmation() {
+            // Make the API call using the selectedClassId
+            $.ajax({
+                url: '/payments/complete?id=' + selectedPaymentId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    alert("Cập nhật thành công")
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ' ' + errorThrown);
+                }
+            });
+
+            // Reset the selectedClassId for future use
+            selectedClassId = null;
+			$(document).ajaxStop(function() { location.reload(true); });
+        }
+
+
+	</script>
+</body>
+
+</html>

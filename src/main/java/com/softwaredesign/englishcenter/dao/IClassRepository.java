@@ -14,5 +14,5 @@ public interface IClassRepository {
 
 	Class findById(Integer id);
 
-	boolean update(Class classObj);
+	boolean update(Class classObj,int studentId);
 }

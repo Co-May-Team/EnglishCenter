@@ -1,6 +1,5 @@
 package com.softwaredesign.englishcenter.entity;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 
 import jakarta.persistence.Column;
@@ -27,8 +26,8 @@ public class Payment extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@JoinColumn(name = "payment_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "payment_id")
 	private int paymentId;
 	
 	@OneToOne
@@ -38,8 +37,10 @@ public class Payment extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "class_id")
 	private Class classObject;
-	private BigDecimal amount;
+	private Double amount;
 	
 	@Column(name = "payment_date")
 	private Date paymentDate;
+	
+	private boolean status;
 }

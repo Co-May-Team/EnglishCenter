@@ -1,5 +1,7 @@
 package com.softwaredesign.englishcenter.dao.impl;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +14,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.softwaredesign.englishcenter.dao.IClassRepository;
+import com.softwaredesign.englishcenter.dao.IStudentRepository;
+import com.softwaredesign.englishcenter.entity.Class;
+import com.softwaredesign.englishcenter.entity.Payment;
 import com.softwaredesign.englishcenter.entity.Student;
 import com.softwaredesign.englishcenter.model.ClassModel;
 import com.softwaredesign.englishcenter.model.CourseModel;
 import com.softwaredesign.englishcenter.model.EmployeeModel;
 import com.softwaredesign.englishcenter.model.StudentModel;
-import com.softwaredesign.englishcenter.entity.Class;
 
 import jakarta.persistence.TypedQuery;
 
@@ -26,6 +30,9 @@ import jakarta.persistence.TypedQuery;
 public class ClassRepositoryImpl implements IClassRepository {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClassRepositoryImpl.class);
+	
+	@Autowired
+	IStudentRepository studentRepository;
 
 	@Autowired
 	SessionFactory sessionFactory;
@@ -96,11 +103,22 @@ public class ClassRepositoryImpl implements IClassRepository {
 	}
 	
 	@Override
-	public boolean update(Class classObj) {
+	public boolean update(Class classObj, int studentId) {
 		boolean result = false;
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.merge(classObj);
+			if(studentId != -1) {
+				Payment payment = new Payment();
+				payment.setAmount(classObj.getTuitionFee().doubleValue());
+				payment.setClassObject(classObj);
+				payment.setStatus(false);
+				Student student = studentRepository.findById(studentId);
+				payment.setStudent(student);
+				LocalDate localDate = LocalDate.now();
+				payment.setPaymentDate(Date.valueOf(localDate));
+				session.merge(payment);
+			}
 			result = true;
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
