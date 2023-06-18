@@ -43,7 +43,8 @@ public class SecurityConfig {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}).httpBasic().and().csrf().disable(); // Disable CSRF protection
+		}).httpBasic().disable()
+		.csrf().disable(); // Disable CSRF protection
 
 		return http.build();
 	}
