@@ -15,50 +15,43 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-        .authorizeHttpRequests(requests -> {
-            try {
-                requests
-                    .requestMatchers(HttpMethod.GET, "/static/**", "/templates/**","/resources/**", "/css/**", "/js/**","/assets/**").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                    .formLogin()
-                        .loginPage("/login")
-                        .permitAll()
-                        .loginProcessingUrl("/j_spring_security_check")
-                        .successHandler((request, response, authentication) -> {
-                            // Custom logic for redirection
-                            response.sendRedirect("/");
-                        })
-                        .failureUrl("/login?success=false")
-                    .and()
-                    .logout()
-                        .permitAll();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        })
-        .httpBasic()
-        .and()
-        .csrf().disable(); // Disable CSRF protection
+		http.authorizeHttpRequests(requests -> {
+			try {
+				requests.requestMatchers(
+						HttpMethod.GET, "/static/**", 
+						"/templates/**", 
+						"/resources/**", 
+						"/css/**",
+						"/js/**", 
+						"/assets/**").permitAll()
+						.anyRequest().authenticated()
+						.and().formLogin()
+						.loginPage("/login").permitAll().loginProcessingUrl("/j_spring_security_check")
+						.successHandler((request, response, authentication) -> {
+							// Custom logic for redirection
+							response.sendRedirect("/");
+						}).failureUrl("/login?success=false")
+						.and().logout().permitAll().and().httpBasic().disable();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}).httpBasic().and().csrf().disable(); // Disable CSRF protection
 
-    return http.build();
+		return http.build();
 	}
 
-	
 	@Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.withUsername("admin")
-            .password(passwordEncoder().encode("admin"))
-            .roles("ADMIN")
-            .build();
-        return new InMemoryUserDetailsManager(user);
-    }
+	public InMemoryUserDetailsManager userDetailsService() {
+		UserDetails user = User.withUsername("admin").password(passwordEncoder().encode("admin")).roles("ADMIN")
+				.build();
+		return new InMemoryUserDetailsManager(user);
+	}
 }
