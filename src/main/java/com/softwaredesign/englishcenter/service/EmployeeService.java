@@ -53,7 +53,7 @@ public class EmployeeService {
 		return employeeRepository.save(employee);
 	}
 	
-	public List<EmployeeModel> findAllStudents(String json){
+	public List<EmployeeModel> findAllEmployees(String json){
 		List<EmployeeModel> employeeModels = null;
 		JsonMapper jsonMapper = new JsonMapper();
 		JsonNode jsonObjectPost;
