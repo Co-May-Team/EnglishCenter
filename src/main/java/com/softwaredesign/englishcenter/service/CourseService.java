@@ -1,13 +1,17 @@
 package com.softwaredesign.englishcenter.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.softwaredesign.englishcenter.dao.ICourseRepository;
+import com.softwaredesign.englishcenter.entity.Class;
 import com.softwaredesign.englishcenter.entity.Course;
+import com.softwaredesign.englishcenter.model.ClassModel;
 import com.softwaredesign.englishcenter.model.CourseModel;
+import com.softwaredesign.englishcenter.model.EmployeeModel;
 import com.softwaredesign.englishcenter.model.ScheduleModel;
 
 @Service
@@ -31,6 +35,7 @@ public class CourseService {
 		CourseModel courseModel = new CourseModel();
 		courseModel.setCourseId(course.getCourseId());
 		courseModel.setName(course.getName());
+    	
 		ScheduleModel scheduleModel = new ScheduleModel();
 		scheduleModel.setScheduleId(course.getSchedule().getScheduleId());
 		scheduleModel.setStartDate(course.getSchedule().getStartDate().toString());
@@ -40,5 +45,9 @@ public class CourseService {
 	}
 	public boolean update(Course course) {
 		return courseRepository.update(course);
+	}
+	
+	public CourseModel findModelById(Integer id) {
+		return courseRepository.findModelById(id);
 	}
 }

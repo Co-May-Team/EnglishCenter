@@ -14,6 +14,7 @@ import lombok.Setter;
 public class CourseModel {
 	private int courseId;
 	private String name;	
+	private String nameForDropdown;
 	private List<ClassModel> classModels;
 	private ScheduleModel scheduleModel;
 	

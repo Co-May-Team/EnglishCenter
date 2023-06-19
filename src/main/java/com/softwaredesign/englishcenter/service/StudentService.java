@@ -94,4 +94,7 @@ public class StudentService {
     	studentOriginModel.setAddress(student.getAddress());
     	return studentOriginModel;
 	}
+	public int findTotalStudent() {
+		return studentRepository.findTotalStudent();
+	}
 }

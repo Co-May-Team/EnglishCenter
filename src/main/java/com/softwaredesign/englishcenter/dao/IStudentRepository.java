@@ -18,4 +18,5 @@ public interface IStudentRepository {
 	boolean deleteById(Integer id);
 	boolean removeStudentInClass(Integer studentId, Integer classId);
 	int update(Student student);
+	int findTotalStudent();
 }

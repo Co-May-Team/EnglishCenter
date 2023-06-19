@@ -34,7 +34,7 @@ public class Course extends BaseEntity {
 	
 	private String name;
 	
-	@OneToMany
+	@OneToMany()
 	@JoinColumn(name = "course_id")
 	private List<Class> classes;
 	

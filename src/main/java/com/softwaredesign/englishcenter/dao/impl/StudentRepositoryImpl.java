@@ -171,5 +171,17 @@ public class StudentRepositoryImpl implements IStudentRepository {
 		}
 		return -1;
 	}
+	public int findTotalStudent() {
+		List<Student> students = null;
+		StringBuilder hql = new StringBuilder("FROM student AS st WHERE st.validflag = 1 ");
 
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			TypedQuery<Student> query = session.createQuery(hql.toString(), Student.class);
+			students = query.getResultList();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+		}
+		return students.size();
+	}
 }

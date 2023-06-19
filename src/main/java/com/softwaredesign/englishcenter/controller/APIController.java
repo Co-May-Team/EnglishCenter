@@ -81,6 +81,13 @@ public class APIController {
     	return courseModel;
     }
     
+    @GetMapping("/findCourseModelById/{id}")
+    @ResponseBody
+    public CourseModel findCourseModelById(@PathVariable Integer id){
+    	CourseModel course = courseService.findModelById(id);
+    	return course;
+    }
+    
     @GetMapping("/updateEmployeeStatus/{id}")
     @ResponseBody
     public EmployeeOriginModel updateEmployeeStatus(@PathVariable Integer id){

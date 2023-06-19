@@ -10,4 +10,5 @@ public interface ICourseRepository {
 	boolean insert(Course course);
 	Course findById(Integer id);
 	boolean update(Course course);
+	CourseModel findModelById(Integer id);
 }
