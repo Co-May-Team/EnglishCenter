@@ -335,6 +335,8 @@
                 success: function (course) {
                     // Update the content of the "courseTable" div with the course information
                     var courseTable = document.getElementById('courseTable');
+                    var courseButton = document.getElementById('courseButton');
+                    courseButton.innerHTML = course.nameForDropdown;
 
                     courseTable.innerHTML = `
                 <div class="row justify-content-center text-center">
