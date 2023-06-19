@@ -18,4 +18,5 @@ public class EmployeeModel {
 	private String phoneNumber;
 	private BigDecimal income;
 	private RoleModel role;
+	private boolean validflag;
 }

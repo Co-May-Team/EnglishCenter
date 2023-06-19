@@ -46,7 +46,7 @@ public class APIController {
     @PostMapping("/findAllEmployee")
     @ResponseBody
     public List<EmployeeModel> findAllEmployee(@RequestBody String json){
-    	List<EmployeeModel> employees = employeeService.findAllStudents(json);
+    	List<EmployeeModel> employees = employeeService.findAllEmployees(json);
     	return employees;
     }
     
@@ -79,6 +79,20 @@ public class APIController {
     	Course course = courseService.findById(id);
     	CourseModel courseModel = courseService.toOriginModel(course);
     	return courseModel;
+    }
+    
+    @GetMapping("/updateEmployeeStatus/{id}")
+    @ResponseBody
+    public EmployeeOriginModel updateEmployeeStatus(@PathVariable Integer id){
+    	Employee employee = employeeService.findById(id);
+    	if(employee.isValidflag()) {
+    		employee.setValidflag(false);
+    	}else {
+    		employee.setValidflag(true);
+    	}
+    	employeeService.update(employee);
+    	EmployeeOriginModel employeeModel = employeeService.toOriginModel(employee);
+    	return employeeModel;
     }
      
     

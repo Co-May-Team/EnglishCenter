@@ -70,7 +70,7 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
 		List<EmployeeModel> employeeModels = null;
 		List<Employee> employees = null;
 		
-		StringBuilder hql = new StringBuilder("FROM employee AS emp WHERE emp.role.roleId != '1' and emp.validflag = '1' ");
+		StringBuilder hql = new StringBuilder("FROM employee AS emp WHERE emp.role.roleId != '1' ");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 	        TypedQuery<Employee> query = session.createQuery(hql.toString(), Employee.class);
@@ -87,6 +87,7 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
 	        	roleModel.setRoleId(employee.getRole().getRoleId());
 	        	roleModel.setName(employee.getRole().getName());
 	        	employeeModel.setRole(roleModel);
+	        	employeeModel.setValidflag(employee.isValidflag());
 	        	employeeModels.add(employeeModel);
 	        }
 		} catch (Exception e) {
@@ -150,5 +151,6 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
 		}
 		return employeeModels;
 	}
+
 
 }

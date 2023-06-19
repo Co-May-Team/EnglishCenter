@@ -61,4 +61,6 @@ public class Employee {
 	@OneToMany
 	@JoinColumn(name = "class_id")
 	private List<Class> classes;
+	
+	
 }
