@@ -69,8 +69,15 @@ public class CourseRepositoryImpl implements ICourseRepository {
 	        	courseModel.setClassModels(classModels);
 	        	ScheduleModel scheduleModel = new ScheduleModel();
 	        	scheduleModel.setScheduleId(course.getSchedule().getScheduleId());
-	        	scheduleModel.setStartDate(course.getSchedule().getStartDate().toString());
-	        	scheduleModel.setEndDate(course.getSchedule().getEndDate().toString());
+	            SimpleDateFormat dateOrigin = new SimpleDateFormat("yyyy-MM-dd");
+	            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	            
+	            Date startdateFormatSchedule = dateOrigin.parse(course.getSchedule().getStartDate().toString());
+	        	scheduleModel.setStartDate(dateFormat.format(startdateFormatSchedule).toString());
+	        	
+	            Date enddateFormatSchedule = dateOrigin.parse(course.getSchedule().getEndDate().toString());
+	        	scheduleModel.setEndDate(dateFormat.format(enddateFormatSchedule).toString());
+	        	
 	        	courseModel.setScheduleModel(scheduleModel);
 	        	
 	        	StringBuilder nameForDropdown = new StringBuilder();
