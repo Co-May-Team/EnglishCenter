@@ -106,7 +106,7 @@
                                         <div class="mb-3">
                                             <label for="courseId" class="form-label">Khóa học</label>
                                             <select name="courseId" class="form-select">
-                                                <option value="">Chọn giáo viên</option>
+                                                <option value="">Chọn khóa học</option>
                                                 <option th:each="course : ${courses}" th:value="${course.courseId}"
                                                     th:text="${course.name}">
                                                 </option>

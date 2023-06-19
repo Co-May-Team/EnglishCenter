@@ -21,6 +21,7 @@ import com.softwaredesign.englishcenter.model.ClassModel;
 import com.softwaredesign.englishcenter.model.CourseModel;
 import com.softwaredesign.englishcenter.model.EmployeeModel;
 import com.softwaredesign.englishcenter.model.StudentModel;
+import com.softwaredesign.englishcenter.model.StudentOriginModel;
 import com.softwaredesign.englishcenter.service.ClassService;
 import com.softwaredesign.englishcenter.service.CourseService;
 import com.softwaredesign.englishcenter.service.EmployeeService;
@@ -141,14 +142,16 @@ public class ClassController {
 		return "redirect:/class";
 	}
 	@PostMapping("/deleteStudent")
-	public String delete(@RequestParam Integer studentId, 
+	@ResponseBody
+	public StudentOriginModel delete(@RequestParam Integer studentId, 
 			@RequestParam Integer classId) {
 			studentService.removeStudentInClass(studentId, classId);
 			Class classObj = classService.findById(classId);
 			classObj.setNumberOfstudents(classObj.getNumberOfstudents() - 1);
 			classService.update(classObj, -1);
-			String view = "redirect:/class/"+ classId;
-		return view;
+			Student student = studentService.findById(studentId);
+			
+		return studentService.toOriginModel(student);
 
 	}
 	

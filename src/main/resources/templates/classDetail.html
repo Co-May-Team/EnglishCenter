@@ -347,9 +347,7 @@
                 },
                 success: function (student) {
                     // DElete the student in the table
-                    rowStudentTable.remove();
-                    alert("Thêm học viên thành công")
-                    console.log(rowStudentTable.innerHTML);
+                    $(document).ajaxStop(function() { location.reload(true); });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('Error: ' + textStatus + ' ' + errorThrown);
@@ -393,7 +391,7 @@
                                 </td>`+
                         '</tr>';
                     $('#tableStudent tbody').append(newRow);
-                    alert("Thêm học viên thành công")
+                    $(document).ajaxStop(function() { location.reload(true); });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('Error: ' + textStatus + ' ' + errorThrown);
@@ -443,7 +441,7 @@
                     studentId: studentId
                 },
                 success: function (data) {
-                    alert("Thêm học viên thành công")
+                    $(document).ajaxStop(function() { location.reload(true); });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('Error: ' + textStatus + ' ' + errorThrown);
