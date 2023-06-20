@@ -139,7 +139,7 @@ public class ClassController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "redirect:/class";
+		return "redirect:/class/" + classId;
 	}
 	@PostMapping("/deleteStudent")
 	@ResponseBody
