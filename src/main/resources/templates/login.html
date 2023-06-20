@@ -78,6 +78,16 @@
 	<script src="/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 	<script src="/js/main.js"></script>
-
+	<script>
+		// Kiểm tra lỗi khi trang tải xong
+		window.addEventListener("DOMContentLoaded", function() {
+		  const urlParams = new URLSearchParams(window.location.search);
+		  const success = urlParams.get("success");
+	
+		  if (success === "false") {
+			alert("Sai thông tin đăng nhập");
+		  }
+		});
+	  </script>
 </body>
 </html>
