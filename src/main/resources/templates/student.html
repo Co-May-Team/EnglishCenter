@@ -35,6 +35,7 @@
                                         <th>Số điện thoại</th>
                                         <th>CMND/CCCD</th>
                                         <th></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -54,6 +55,14 @@
                                                         d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                                 </svg>
                                             </a>
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox"
+                                                    th:id="${student.id}"
+                                                    th:checked="${student.validflag == true}">
+                                                <label class="form-check-label" for="flexSwitchCheckChecked">Trạng thái hoạt động</label>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -248,6 +257,28 @@
         })
 
     </script>
+        <!-- Enable or disable the element based on the toggle switch state -->
+        <script>
+            var switchButtons = document.querySelectorAll('.form-check-input');
+    
+            switchButtons.forEach(function (switchButton) {
+                switchButton.addEventListener('change', function (event) {
+                    var switchId = event.target.getAttribute('id');
+                    console.log('Switch clicked. ID: ' + switchId);
+                    $.ajax({
+                        url: '/api/updateStudentStatus/' + switchId,
+                        type: 'GET',
+                        success: function (data) {
+                            console.log('Switch is checked');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log('Error: ' + textStatus + ' ' + errorThrown);
+                        }
+    
+                    })
+                });
+            });
+        </script>
 
 </body>
 

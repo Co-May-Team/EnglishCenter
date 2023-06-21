@@ -101,6 +101,20 @@ public class APIController {
     	EmployeeOriginModel employeeModel = employeeService.toOriginModel(employee);
     	return employeeModel;
     }
+    
+    @GetMapping("/updateStudentStatus/{id}")
+    @ResponseBody
+    public StudentOriginModel updateStudentStatus(@PathVariable Integer id){
+    	Student student = studentService.findById(id);
+    	if(student.isValidflag()) {
+    		student.setValidflag(false);
+    	}else {
+    		student.setValidflag(true);
+    	}
+    	studentService.update(student);
+    	StudentOriginModel studentModel = studentService.toOriginModel(student);
+    	return studentModel;
+    }
      
     
 }

@@ -32,11 +32,11 @@ public class StudentRepositoryImpl implements IStudentRepository {
 		List<Student> students = null;
 		List<StudentModel> studentModels = new ArrayList<StudentModel>();
 		;
-		StringBuilder hql = new StringBuilder("FROM student AS st left join st.classes cl WHERE st.validflag = 1 ");
+		StringBuilder hql = new StringBuilder("FROM student AS st left join st.classes cl WHERE ");
 		if (classId > 0) {
-			hql.append(" AND cl.classId = :classId");
+			hql.append(" cl.classId = :classId AND ");
 		}
-		hql.append(" AND ( st.firstName LIKE '%" + name);
+		hql.append(" ( st.firstName LIKE '%" + name);
 		hql.append("%' OR st.midleName LIKE '%" + name);
 		hql.append("%' OR st.lastName LIKE '%" + name);
 		hql.append("%')");
@@ -56,6 +56,7 @@ public class StudentRepositoryImpl implements IStudentRepository {
 					studentModel.setAddress(student.getAddress());
 					studentModel.setPhoneNumber(student.getPhoneNumber());
 					studentModel.setCitizenId(student.getCitizenId());
+					studentModel.setValidflag(student.isValidflag());
 					studentModels.add(studentModel);
 				}
 			}
@@ -124,7 +125,7 @@ public class StudentRepositoryImpl implements IStudentRepository {
 	@Override
 	public Student findById(Integer id) {
 		Student student = null;
-		StringBuilder hql = new StringBuilder("FROM student AS st WHERE st.validflag = '1' and st.studentId=:id  ");
+		StringBuilder hql = new StringBuilder("FROM student AS st WHERE st.studentId=:id  ");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			TypedQuery<Student> query = session.createQuery(hql.toString(), Student.class);

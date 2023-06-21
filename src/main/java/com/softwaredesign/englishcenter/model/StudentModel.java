@@ -15,4 +15,5 @@ public class StudentModel {
 	String address;
 	String phoneNumber;
 	String citizenId;
+	private boolean validflag;
 }
