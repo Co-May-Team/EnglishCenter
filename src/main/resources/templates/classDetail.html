@@ -51,7 +51,7 @@
                     </table>
                     <h1 class="mt-4">
                         Danh sách học viên hiện tại:
-                    </h1>  
+                    </h1>
                     <table class="table table-hover table-responsive-xl" id="tableStudent">
                         <thead class="thead-dark">
                             <tr>
@@ -347,7 +347,7 @@
                 },
                 success: function (student) {
                     // DElete the student in the table
-                    $(document).ajaxStop(function() { location.reload(true); });
+                    $(document).ajaxStop(function () { location.reload(true); });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('Error: ' + textStatus + ' ' + errorThrown);
@@ -370,14 +370,17 @@
                     studentId: selectedstudentId
                 },
                 success: function (student) {
-                    // Append the student to the table
-                    var newRow = '<tr>' +
-                        '<td>' + student.id + '</td>' +
-                        '<td>' + student.fullname + '</td>' +
-                        '<td>' + student.address + '</td>' +
-                        '<td>' + student.phoneNumber + '</td>' +
-                        '<td>' + student.citizenId + '</td>' +
-                        `<td>
+                    if (student.id === null) {
+                        alert('Không thể thêm học viên!')
+                    } else {
+                        // Append the student to the table
+                        var newRow = '<tr>' +
+                            '<td>' + student.id + '</td>' +
+                            '<td>' + student.fullname + '</td>' +
+                            '<td>' + student.address + '</td>' +
+                            '<td>' + student.phoneNumber + '</td>' +
+                            '<td>' + student.citizenId + '</td>' +
+                            `<td>
                                     <a href="" th:onclick="|openConfirmationModal('${student.id}')|" data-bs-toggle="modal"
                                     data-bs-target="#confirmDelete">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -389,9 +392,11 @@
                                         </svg>
                                     </a>
                                 </td>`+
-                        '</tr>';
-                    $('#tableStudent tbody').append(newRow);
-                    $(document).ajaxStop(function() { location.reload(true); });
+                            '</tr>';
+                        $('#tableStudent tbody').append(newRow);
+                        $(document).ajaxStop(function () { location.reload(true); });
+                    }
+
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('Error: ' + textStatus + ' ' + errorThrown);
@@ -441,7 +446,7 @@
                     studentId: studentId
                 },
                 success: function (data) {
-                    $(document).ajaxStop(function() { location.reload(true); });
+                    $(document).ajaxStop(function () { location.reload(true); });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('Error: ' + textStatus + ' ' + errorThrown);
