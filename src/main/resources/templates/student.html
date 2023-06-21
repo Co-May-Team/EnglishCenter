@@ -30,21 +30,21 @@
                             <table id="studentTable" class="table table-responsive-xl">
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th>Họ và tên</th>
-                                        <th>Địa chỉ</th>
-                                        <th>Số điện thoại</th>
-                                        <th>CMND/CCCD</th>
-                                        <th></th>
-                                        <th></th>
+                                        <th style="text-align: center;">Họ và tên</th>
+                                        <th style="text-align: center;">Địa chỉ</th>
+                                        <th style="text-align: center;">Số điện thoại</th>
+                                        <th style="text-align: center;">CMND/CCCD</th>
+                                        <th style="text-align: center;">Chỉnh sửa</th>
+                                        <th style="text-align: center;">Trạng thái hoạt động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="student : ${students}" th:id="'student-' + ${student.id}">
-                                        <td th:text="${student.fullname}"></td>
-                                        <td th:text="${student.address}"></td>
-                                        <td th:text="${student.phoneNumber}"></td>
-                                        <td th:text="${student.citizenId}"></td>
-                                        <td>
+                                        <td th:text="${student.fullname}" style="text-align: center;"></td>
+                                        <td th:text="${student.address}" style="text-align: center;"></td>
+                                        <td th:text="${student.phoneNumber}" style="text-align: center;"></td>
+                                        <td th:text="${student.citizenId}" style="text-align: center;"></td>
+                                        <td style="text-align: center;">
                                             <a href="" data-bs-toggle="modal" data-bs-target="#updateStudent"
                                                 th:onclick="|setStudentId('${student.id}')|">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -56,12 +56,11 @@
                                                 </svg>
                                             </a>
                                         </td>
-                                        <td>
+                                        <td style="text-align: center;">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox"
                                                     th:id="${student.id}"
                                                     th:checked="${student.validflag == true}">
-                                                <label class="form-check-label" for="flexSwitchCheckChecked">Trạng thái hoạt động</label>
                                             </div>
                                         </td>
                                     </tr>

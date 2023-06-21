@@ -105,6 +105,9 @@ public class ClassController {
 			@RequestParam Integer classId) {
 		Student student = studentService.findById(studentId);
 		Class classObj = classService.findById(classId);
+		if(classObj.getNumberOfstudents() == classObj.getMaxiumSize()) {
+			return null;
+		}
 		List<Student> students = classObj.getStudents();
 		students.add(student);
 		classObj.setStudents(students);
